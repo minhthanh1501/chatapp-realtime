@@ -7,5 +7,6 @@ router.post("/login", ctrls.login);
 router.put("/update", verifyAccessToken, ctrls.updateUser);
 router.post("/logout", verifyAccessToken, ctrls.logout);
 router.get("/current", verifyAccessToken, ctrls.getCurrentUser);
+router.post("/search", verifyAccessToken, ctrls.searchUser);
 
 module.exports = router;

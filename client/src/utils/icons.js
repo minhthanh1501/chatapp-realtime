@@ -4,6 +4,7 @@ import { HiUserAdd } from "react-icons/hi";
 import { LuLogOut } from "react-icons/lu";
 import { FiArrowUpLeft } from "react-icons/fi";
 import { MdPersonSearch } from "react-icons/md";
+import { IoMdCloseCircleOutline } from "react-icons/io";
 const icons = {
   IoIosClose,
   IoChatbox,
@@ -11,6 +12,7 @@ const icons = {
   LuLogOut,
   FiArrowUpLeft,
   MdPersonSearch,
+  IoMdCloseCircleOutline,
 };
 
 export default icons;

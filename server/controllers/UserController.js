@@ -104,10 +104,29 @@ const updateUser = asyncHandler(async (req, res) => {
   });
 });
 
+const searchUser = asyncHandler(async (req, res) => {
+  const { search } = req.body;
+  const response = await User.find({
+    $or: [
+      { name: new RegExp(search, "i", "g") },
+      { email: new RegExp(search, "i", "g") },
+    ],
+  })
+    .select("-password")
+    .exec();
+  console.log(search);
+  // console.log(response);
+  return res.status(200).json({
+    success: response ? true : false,
+    mes: response ? response : "User Not Found",
+  });
+});
+
 module.exports = {
   register,
   login,
   getCurrentUser,
   logout,
   updateUser,
+  searchUser,
 };

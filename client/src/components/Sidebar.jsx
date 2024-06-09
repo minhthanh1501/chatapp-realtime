@@ -11,7 +11,7 @@ import SearchUser from "./SearchUser";
 const sideBar = () => {
   let user = useSelector((state) => state.user?.current);
   const [editUserOpen, setEditUserOpen] = useState(false);
-  const [openSearchUser, setOpenSearchUser] = useState(true);
+  const [openSearchUser, setOpenSearchUser] = useState(false);
   const [allUsers, setAllUsers] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -75,7 +75,7 @@ const sideBar = () => {
           </h2>
         </div>
         <Divider />
-        <div className=" h-[calc(100vh-10px)] overflow-x-hidden overflow-y-scroll">
+        <div className=" h-[calc(100vh-10px)] overflow-x-hidden overflow-y-scroll no-scrollbar">
           {allUsers.length == 0 && (
             <div className="mt-12">
               <div className="flex justify-center items-center my-4 text-slate-500">
@@ -105,7 +105,6 @@ const sideBar = () => {
           onClose={() => {
             setOpenSearchUser(false);
           }}
-          // data={user}
         />
       )}
     </div>

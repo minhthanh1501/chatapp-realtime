@@ -38,6 +38,7 @@ const Avatar = ({ userID, name, imageUrl, width, height }) => {
         <img
           src="https://static.vecteezy.com/system/resources/thumbnails/002/318/271/small_2x/user-profile-icon-free-vector.jpg"
           alt="not found"
+          style={{ width: width + "px", height: height + "px" }}
         />
       )}
     </div>
