@@ -7,6 +7,7 @@ export const userSlice = createSlice({
     current: null,
     token: null,
     onlineUser: [],
+    socketConnection : null
   },
   reducers: {
     login: (state, action) => {
@@ -19,8 +20,10 @@ export const userSlice = createSlice({
       state.isLoggedIn = false;
       state.current = null;
       state.token = null;
+      state.socketConnection = null
     },
     setOnlineUser: (state, action) => {
+      // console.log(action)
       state.onlineUser = action.payload;
     },
     updateUser: (state, action) => {
@@ -28,6 +31,9 @@ export const userSlice = createSlice({
         state.current = { ...state.current, ...action.payload };
       }
     },
+    setSocketConnection: (state,action) => {
+      state.socketConnection = action.payload
+    }
   },
   // Code logic xử lý async action
   //   extraReducers: (builder) => {
@@ -54,6 +60,6 @@ export const userSlice = createSlice({
   //   },
 });
 
-export const { login, logout, setOnlineUser, updateUser } = userSlice.actions;
+export const { login, logout, setOnlineUser, updateUser, setSocketConnection } = userSlice.actions;
 
 export default userSlice.reducer;

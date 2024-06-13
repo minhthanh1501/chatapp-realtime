@@ -4,6 +4,7 @@ const path = {
   ALL: "*",
   LOGIN: "login",
   REGISTER: "register",
+  MESSAGE: ":userID"
 };
 
 export default path;

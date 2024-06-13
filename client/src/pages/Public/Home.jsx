@@ -3,31 +3,31 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Message, Sidebar } from "../../components";
 import io from "socket.io-client";
-import { setOnlineUser } from "../../store/user/userSlice";
+import { setOnlineUser, setSocketConnection } from "../../store/user/userSlice";
 
 const Home = () => {
-  const URL = "http://localhost:5000/api/user/current";
   let token = useSelector((state) => state.user.token);
   const dispatch = useDispatch();
-  // console.log(token);
-
+  // console.log(user);
+  const socketConnection = io("http://localhost:5000", {
+    auth: {
+      token: token,
+    },
+  });
   /*Socket connection */
   useEffect(() => {
-    const socketConnection = io("http://localhost:5000", {
-      auth: {
-        token: token,
-      },
-    });
 
     socketConnection.on("onlineUser", (data) => {
-      // console.log(data);
+      console.log(data);
       dispatch(setOnlineUser(data));
     });
+    console.log(socketConnection);
+    // dispatch(setSocketConnection(socketConnection))
 
     return () => {
       socketConnection.disconnect();
     };
-  }, []);
+  }, [socketConnection]);
 
   return (
     <div className="flex gap-3  items-center w-full max-h-full">

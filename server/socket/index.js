@@ -31,6 +31,10 @@ io.on("connection", async (socket) => {
 
   io.emit("onlineUser", Array.from(onlineUser));
 
+  socket.on('message-page',(userID)=>{
+    console.log('userID',userID)
+  })
+
   //disconnect
   socket.on("disconnect", () => {
     onlineUser.delete(user?._id);

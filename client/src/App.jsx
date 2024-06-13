@@ -5,6 +5,7 @@ import { Home, Login, Register, Public } from "./pages";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { Message } from "./components";
 axios.defaults.withCredentials = true;
 function App() {
   return (
@@ -13,7 +14,9 @@ function App() {
         <Routes>
           <Route path={path.PUBLIC} element={<Public />}>
             <Route path={path.REGISTER} element={<Register />} />
-            <Route path={path.HOME} element={<Home />} />
+            <Route path={path.HOME} element={<Home />} >
+              <Route path={path.MESSAGE} element={<Message />} />
+            </Route>
             <Route path={path.LOGIN} element={<Login />} />
             <Route path={path.ALL} element={<Home />} />
           </Route>

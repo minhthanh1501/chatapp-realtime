@@ -54,7 +54,7 @@ const sideBar = () => {
               setEditUserOpen(true);
             }}
           >
-            <Avatar imageUrl={user?.profile_pic} />
+            <Avatar imageUrl={user?.profile_pic} userID={user._id}/>
           </button>
           <button
             title="log out"
