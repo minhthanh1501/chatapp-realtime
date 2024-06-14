@@ -31,7 +31,7 @@ export const userSlice = createSlice({
         state.current = { ...state.current, ...action.payload };
       }
     },
-    setSocketConnection: (state,action) => {
+    setSocketConnection : (state,action)=>{
       state.socketConnection = action.payload
     }
   },
