@@ -1,14 +1,14 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import icons from "../utils/icons";
-import Avatar from "./Avatar";
+import icons from "../../utils/icons";
+import Avatar from "../Avatar/Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import EditUserDetail from "./EditUserDetail";
-import { logout } from "../store/user/userSlice";
-import Divider from "./Divider";
-import SearchUser from "./SearchUser";
+import { logout } from "../../store/user/userSlice";
+import Divider from "../Divider/Divider";
+import SearchUser from "../SearchUser";
+import EditUserDetail from "../EditUserDetail";
 
-const sideBar = () => {
+const Sidebar = () => {
   let user = useSelector((state) => state.user?.current);
   const [editUserOpen, setEditUserOpen] = useState(false);
   const [openSearchUser, setOpenSearchUser] = useState(false);
@@ -54,7 +54,7 @@ const sideBar = () => {
               setEditUserOpen(true);
             }}
           >
-            <Avatar imageUrl={user?.profile_pic} userID={user._id}/>
+            <Avatar imageUrl={user?.profile_pic} userID={user._id} />
           </button>
           <button
             title="log out"
@@ -111,4 +111,4 @@ const sideBar = () => {
   );
 };
 
-export default sideBar;
+export default Sidebar;

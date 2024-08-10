@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import Avatar from "./Avatar";
 import { FaPlus } from "react-icons/fa6";
 import { FaImages } from "react-icons/fa6";
 import { IoIosVideocam } from "react-icons/io";
+import Avatar from "../Avatar";
 const Message = () => {
   const params = useParams();
   const socketConnection = useSelector(

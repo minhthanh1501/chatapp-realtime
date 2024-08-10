@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
-import Avatar from "./Avatar";
-import uploadFile from "../utils/uploadFile";
-import Divider from "./Divider";
+import uploadFile from "@/utils/uploadFile";
+import Divider from "../Divider";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { login, updateUser } from "../store/user/userSlice";
+import { updateUser } from "@/store/user/userSlice";
+import Avatar from "../Avatar";
 
 const EditUserDetail = ({ onClose, data }) => {
   const [userData, setUserData] = useState({

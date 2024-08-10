@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import icons from "../utils/icons";
-import LoadingCircle from "./LoadingCircle";
-import UserSearchCard from "./UserSearchCard";
+import icons from "../../utils/icons";
+import LoadingCircle from "../commons/LoadingCircle/LoadingCircle";
+import UserSearchCard from "../UserSearchCard";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useSelector } from "react-redux";

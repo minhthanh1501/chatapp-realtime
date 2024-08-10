@@ -1,65 +1,110 @@
-const User = require("../models/UserModel");
+const UserModel = require("../models/UserModel");
 const asyncHandler = require("express-async-handler");
-const { responseWithStatusMessageData } = require("../utils/responseTrait");
-const { generateAccessToken } = require("../middlewares/jwt");
+const {
+  generateAccessToken,
+  generateRefreshToken,
+} = require("../middlewares/jwt");
 
 const register = asyncHandler(async (req, res) => {
   const { name, email, password, profile_pic } = req.body;
 
   if (!name || !email || !password) throw new Error("Missing Input");
-  const alreadyEmail = await User.findOne({ email });
-  console.log(alreadyEmail);
+  const alreadyEmail = await UserModel.findOne({ email });
+
   if (alreadyEmail) throw new Error("Email Existed!");
 
-  const user = await User.create(req.body);
+  const user = await UserModel.create(req.body);
 
-  responseWithStatusMessageData(
-    req,
-    res,
-    200,
-    user,
-    "Register Success!",
-    "Register Failed",
-    user
-  );
+  return res.status(200).json({
+    status: user ? true : false,
+    message: user ? "Register Success!" : "Something went wrong",
+    userData: user,
+  });
+});
+
+const checkEmail = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  const checkEmail = await UserModel.findOne({ email }).select("-password");
+
+  if (!checkEmail) {
+    return res.status(400).json({
+      status: true,
+      message: "User not exist",
+      userData: null,
+    });
+  }
+
+  return res.status(200).json({
+    status: true,
+    message: "Email verify",
+    userData: checkEmail,
+  });
+});
+
+const checkPassword = asyncHandler(async (req, res) => {
+  const { password, userId } = req.body;
+
+  const user = await UserModel.findById(userId);
+
+  if (user && (await user.isCorrectPassword(password))) {
+    const { email, password, ...userData } = user.toObject();
+
+    const accessToken = generateAccessToken(user._id, email);
+
+    const newRefreshToken = generateRefreshToken(user._id);
+
+    await UserModel.findByIdAndUpdate(
+      user._id,
+      { refreshToken: newRefreshToken },
+      { new: true }
+    );
+
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      maxAge: 1 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.status(200).json({
+      status: true,
+      message: "Login success!",
+      accessToken,
+      userData,
+    });
+  } else {
+    throw new Error("Please check password");
+  }
 });
 
 const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) throw new Error("Missing Input");
-  const user = await User.findOne({ email });
+  const user = await UserModel.findOne({ email });
   if (user && (await user.isCorrectPassword(password))) {
     const { email, password, ...userData } = user.toObject();
 
     const accessToken = generateAccessToken(user._id, email);
 
-    res.cookie("token", accessToken, {
+    const newRefreshToken = generateRefreshToken(user._id);
+
+    await UserModel.findByIdAndUpdate(
+      user._id,
+      { refreshToken: newRefreshToken },
+      { new: true }
+    );
+
+    res.cookie("refreshToken", newRefreshToken, {
       httpOnly: true,
       maxAge: 1 * 24 * 60 * 60 * 1000,
     });
 
-    // const cookieOptions = {
-    //   http: true,
-    //   secure: true,
-    // };
-
-    // return res.cookie("token", accessToken, cookieOptions).status(200).json({
-    //   message: "Login successfully",
-    //   token: accessToken,
-    //   success: true,
-    //   userData,
-    // });
-    responseWithStatusMessageData(
-      req,
-      res,
-      200,
-      user,
-      "Login Success!",
-      "Login Failed",
+    return res.status(200).json({
+      success: true,
+      mes: "Login success!",
       accessToken,
-      userData
-    );
+      userData,
+    });
   } else {
     throw new Error(`Invalid credentials!`);
   }
@@ -68,11 +113,12 @@ const login = asyncHandler(async (req, res) => {
 const getCurrentUser = asyncHandler(async (req, res) => {
   const { _id } = req.user;
 
-  const user = await User.findById(_id).select("-password");
+  const user = await UserModel.findById(_id).select("-password");
 
   return res.status(200).json({
-    success: user ? true : false,
-    rs: user ? user : "User not found",
+    status: user ? true : false,
+    message: user ? "Get User Current success!" : "Something Went Wrong",
+    userData: user,
   });
 });
 
@@ -89,24 +135,25 @@ const logout = asyncHandler(async (req, res) => {
   });
 });
 
-const updateUser = asyncHandler(async (req, res) => {
+const updateUserCurrent = asyncHandler(async (req, res) => {
   const { _id } = req.user;
 
   if (!_id || Object.keys(req.body).length === 0)
     throw new Error("Missing inputs");
-  const response = await User.findByIdAndUpdate(_id, req.body, {
+  const response = await UserModel.findByIdAndUpdate(_id, req.body, {
     new: true,
   }).select("-password");
 
   return res.status(200).json({
-    success: response ? true : false,
-    updatedUser: response ? response : "User Not Found",
+    status: response ? true : false,
+    message: response ? "Update User Current success!" : "Something Went Wrong",
+    userData: response,
   });
 });
 
 const searchUser = asyncHandler(async (req, res) => {
   const { search } = req.body;
-  const response = await User.find({
+  const response = await UserModel.find({
     $or: [
       { name: new RegExp(search, "i", "g") },
       { email: new RegExp(search, "i", "g") },
@@ -127,6 +174,8 @@ module.exports = {
   login,
   getCurrentUser,
   logout,
-  updateUser,
+  updateUserCurrent,
   searchUser,
+  checkEmail,
+  checkPassword,
 };

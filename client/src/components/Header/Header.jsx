@@ -1,4 +1,4 @@
-import logo from "../assets/logo.png";
+import logo from "@/assets/logo.png";
 const Header = () => {
   return (
     <div className="w-full flex justify-center items-center py-3 h-20 shadow-md bg-white border-b border-x-stone-500">

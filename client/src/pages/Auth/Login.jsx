@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { login } from "../../store/user/userSlice";
+import { login } from "@/store/user/userSlice";
 
 const Login = () => {
   const [data, setData] = useState({

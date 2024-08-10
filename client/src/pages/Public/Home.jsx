@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Message, Sidebar } from "../../components";
+
 import io from "socket.io-client";
 import { setOnlineUser, setSocketConnection } from "../../store/user/userSlice";
+import Message from "@/components/Message/";
 
 const Home = () => {
   const token = useSelector((state) => state.user.token);
@@ -28,9 +29,6 @@ const Home = () => {
 
   return (
     <div className="flex w-full max-h-full">
-      <div className="w-[25%] bg-white h-full">
-        <Sidebar />
-      </div>
       <div className="w-[75%] h-full">
         <Message />
       </div>
